@@ -112,6 +112,8 @@ export default {
     init () {
       input = this.$refs.editor.$el.getElementsByTagName('textarea')[0]
 
+      let previousWord
+
       input.addEventListener('keyup', (e) => {
         var hasSpecialKeys = e.altKey || e.metaKey || e.ctrlKey
         var hasSpecialKeysOrShift = hasSpecialKeys || e.shiftKey
@@ -154,6 +156,10 @@ export default {
                 return
               }
 
+              if (previousWord === word) {
+                return
+              }
+
               if (word.length >= minWordSize) {
                 // if (!this.showCachedSuggestions(wordID, word)) {
                 if (fetchController[wordID]) {
@@ -172,9 +178,10 @@ export default {
                     this.$store.commit('displaySuggestions', suggestions)
                   })
                   delete transliterateTimeout[wordID]
-                }, 500)
+                }, 0)
                 // }
               }
+              previousWord = word
               this.$store.commit('setCurrentWord', wordID)
             }
             break
