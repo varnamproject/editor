@@ -14,6 +14,11 @@
           </v-tab>
           <v-tab-item value="scheme">
             <v-card>
+              <v-card-text>
+                <p>This page shows which key is mapped to each letter.<br/>
+                <b>"Primary"</b> is the <b>highest</b> priority primary key combination for a letter.<br/>
+                <b>"Secondary"</b> is only a secondary key for a letter.</p>
+              </v-card-text>
               <v-card-title>
                 <v-btn color="primary" @click="toggleAllGroups">{{groupsOpened > 0 ? "Close All" : "Open All"}}</v-btn>
                 <v-spacer></v-spacer>
@@ -39,7 +44,19 @@
             </v-card>
           </v-tab-item>
           <v-tab-item value="credits">
-            aaa
+            <v-simple-table>
+              <template v-slot:default>
+                <tbody>
+                  <tr
+                    v-for="key in Object.keys(details)"
+                    :key="key"
+                  >
+                    <td>{{ key }}</td>
+                    <td>{{ details[key] }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </v-tab-item>
         </v-tabs>
       </v-flex>
@@ -61,21 +78,25 @@ export default {
 
   data () {
     return {
+      details: {},
       definitions: [],
       headers: [
         {
           text: 'Letter',
           align: 'start',
           value: 'Letter',
-          groupable: true
+          groupable: true,
+          width: '10%'
         },
         {
-          text: 'Exact',
-          value: 'Exact'
+          text: 'Primary',
+          value: 'Exact',
+          width: '20%'
         },
         {
-          text: 'Possibility',
-          value: 'Possibility'
+          text: 'Secondary',
+          value: 'Possibility',
+          width: '20%'
         },
         {
           text: ''
@@ -117,6 +138,8 @@ export default {
       fetch(this.$VARNAM_API_URL + '/schemes/' + this.schemeID + '/definitions')
         .then(r => r.json())
         .then(r => {
+          this.details = r.Details
+
           this.definitions = r.Definitions.map(def => {
             def.Exact = def.Exact && def.Exact.join(', ')
             def.Possibility = def.Possibility && def.Possibility.join(', ')
@@ -163,6 +186,12 @@ export default {
 
   mounted () {
     this.init()
+
+    this.$store.subscribe(mutation => {
+      if (mutation.type === 'updateSettings') {
+        this.init()
+      }
+    })
   }
 }
 </script>
