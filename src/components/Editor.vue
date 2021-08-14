@@ -269,7 +269,10 @@ export default {
       const end = position[1]
       const wordID = position[2]
 
-      const replaceWord = suggestions[suggestionIndex]
+      let replaceWord = suggestions[suggestionIndex]
+      if (suggestionIndex === 0) {
+        replaceWord += ''
+      }
       const text = this.inputText
 
       const cursorPos = input.selectionEnd

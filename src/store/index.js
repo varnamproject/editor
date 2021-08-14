@@ -9,6 +9,7 @@ export default new Vuex.Store({
 
     setupDialog: false,
 
+    // TODO replace lang with scheme ID in all places
     // Detailed info of all the schemes
     // https://api.varnamproject.com/languages
     langs: [],
