@@ -17,7 +17,7 @@
             Credits
           </v-tab>
           <v-tab-item value="scheme">
-            <v-card>
+            <v-card :loading="schemeCardLoading">
               <v-card-text>
                 <p>This page shows which key is mapped to each letter.<br/>
                 <b>"Primary"</b> is the <b>highest</b> priority primary key combination for a letter.<br/>
@@ -43,6 +43,9 @@
                     </v-btn>
                     <span class="mx-5 font-weight-bold">{{ group }}</span>
                   </td>
+                </template>
+                <template v-slot:item.Letter="{ item }">
+                  <router-link :to="'/scheme/' + item.Letter" class="primary--text">{{item.Letter}}</router-link>
                 </template>
               </v-data-table>
             </v-card>
@@ -107,7 +110,10 @@ export default {
   data () {
     return {
       details: {},
+
+      schemeCardLoading: false,
       definitions: [],
+
       headers: [
         {
           text: 'Letter',
@@ -167,7 +173,13 @@ export default {
 
   methods: {
     init () {
-      fetch(this.$VARNAM_API_URL + '/schemes/' + this.schemeID + '/definitions')
+      this.schemeCardLoading = true
+
+      let url = this.$VARNAM_API_URL + '/schemes/' + this.schemeID + '/definitions'
+      if (this.$route.params.letter) {
+        url += '/' + this.$route.params.letter
+      }
+      fetch(url)
         .then(r => r.json())
         .then(r => {
           this.details = r.Details
@@ -177,6 +189,8 @@ export default {
             def.Possibility = def.Possibility && def.Possibility.join(', ')
             return def
           })
+
+          this.schemeCardLoading = false
 
           // Make groups closed by default
           this.$nextTick(() => {
@@ -233,6 +247,13 @@ export default {
         this.init()
       }
     })
+  },
+
+  watch: {
+    '$route' (to, from) {
+      // react to route changes
+      this.init()
+    }
   }
 }
 </script>

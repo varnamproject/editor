@@ -21,6 +21,11 @@ const routes = [
     path: '/scheme',
     name: 'Scheme',
     component: Scheme
+  },
+  {
+    path: '/scheme/:letter',
+    name: 'Scheme',
+    component: Scheme
   }
 ]
 
