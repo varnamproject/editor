@@ -24,7 +24,7 @@ const routes = [
   },
   {
     path: '/scheme/:letter',
-    name: 'Scheme',
+    name: 'SchemeLetter',
     component: Scheme
   }
 ]

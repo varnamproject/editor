@@ -34,7 +34,7 @@
                   hide-details
                 ></v-text-field>
               </v-card-title>
-              <v-data-table :headers="headers" :items="definitions" :items-per-page="-1" group-by="Category" :search="search" dense>
+              <v-data-table :headers="headers" :items="definitions" :items-per-page="-1" group-by="Category" :search="search" :custom-sort="schemeTableSortFunc" dense>
                 <template v-slot:group.header="{ group, headers, toggle, isOpen }">
                   <td :colspan="headers.length">
                     <v-btn @click="() => {toggle();updateGroupsOpen();}" x-small icon :ref="group" v-bind:opened="isOpen">
@@ -236,6 +236,28 @@ export default {
         .then(r => {
           this.reverseTransliterationResult = r.result
         })
+    },
+
+    schemeTableSortFunc (items, sortBy, sortDesc) {
+      return items.sort((a, b) => {
+        console.log(sortBy)
+
+        a = a[sortBy[0]]
+        b = b[sortBy[0]]
+
+        const aEnglish = /^[A-Za-z0-9]*$/.test(a.substr(0, 1))
+        const bEnglish = /^[A-Za-z0-9]*$/.test(b.substr(0, 1))
+
+        if (aEnglish && bEnglish) {
+          return a > b
+        } else if (aEnglish && !bEnglish) {
+          return 1
+        } else if (!aEnglish && bEnglish) {
+          return -1
+        } else {
+          return a > b
+        }
+      })
     }
   },
 
