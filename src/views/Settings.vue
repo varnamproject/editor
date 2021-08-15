@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-layout row class="d-flex justify-center">
+    <v-layout class="d-flex justify-center">
       <v-flex xs11 xl6>
         <v-tabs v-model="tab" :grow="true">
           <v-tabs-slider></v-tabs-slider>

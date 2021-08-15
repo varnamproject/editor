@@ -3,12 +3,12 @@
     <v-toolbar>
       <v-toolbar-title class="title">
         <router-link to="/" class="primary--text text-decoration-none">
-          Varnam Editor
+          Varnam
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-row align="end" justify="end" class="d-inline-flex mr-md-1" dense>
-        <v-col lg="3" md="4" sm="4">
+      <v-row align="end" justify="end" dense>
+        <v-col lg="5" md="5" sm="5">
           <v-select
             :items="langs"
             :hide-details="true"
@@ -18,27 +18,19 @@
             dense
           ></v-select>
         </v-col>
-        <v-col lg="2" md="2" sm="3">
-          <div v-if="$route.name == 'Home'">
-            <v-btn to="/settings" color="primary" depressed>
-              <v-icon>mdi-cog</v-icon>
-              Settings
-            </v-btn>
-          </div>
-          <div v-else>
-            <v-btn to="/" color="primary" depressed>
-              <v-icon>mdi-arrow-left</v-icon>
-              Back
-            </v-btn>
-          </div>
-        </v-col>
-        <v-col lg="1" md="2" sm="2">
-          <v-btn to="/scheme" color="primary" depressed>
-            <v-icon>mdi-info</v-icon>
-            Help
-          </v-btn>
-        </v-col>
       </v-row>
+      <v-btn v-if="$route.name == 'Home'" to="/settings" color="primary" class="ma-2" depressed>
+        <v-icon :left="icon">mdi-cog</v-icon>
+        <span v-show="iconText">Settings</span>
+      </v-btn>
+      <v-btn v-else to="/" color="primary" class="ma-2" depressed>
+        <v-icon :left="icon">mdi-arrow-left</v-icon>
+        <span v-show="iconText">Back</span>
+      </v-btn>
+      <v-btn to="/scheme" color="primary" class="ma-2" depressed>
+        <v-icon :left="icon">mdi-information-outline</v-icon>
+        <span v-show="iconText">Help</span>
+      </v-btn>
     </v-toolbar>
   </div>
 </template>
@@ -72,6 +64,26 @@ export default {
           lang: value
         })
       }
+    },
+
+    icon () {
+      return {
+        xs: false,
+        sm: false,
+        md: true,
+        lg: true,
+        xl: true
+      }[this.$vuetify.breakpoint.name]
+    },
+
+    iconText () {
+      return {
+        xs: false,
+        sm: false,
+        md: true,
+        lg: true,
+        xl: true
+      }[this.$vuetify.breakpoint.name]
     }
   }
 }
