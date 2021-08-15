@@ -41,8 +41,7 @@ export default new Vuex.Store({
     // Editor settings
     settings: {
       lang: 'ml',
-      fontSize: 14,
-      suggestionsPanelPosition: 'left'
+      fontSize: 14
     },
 
     // IDB Words. Will change as lang change
