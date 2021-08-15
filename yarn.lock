@@ -8607,7 +8607,7 @@ wcwidth@^1.0.1:
 
 "webime@https://github.com/varnamproject/webIME.git":
   version "1.0.0"
-  resolved "https://github.com/varnamproject/webIME.git#7895eca8b940ecdd49359dd531da3cc81f3c1622"
+  resolved "https://github.com/varnamproject/webIME.git#c8e04c49d0bb8293bf90ebe0844aff5ada36cf47"
 
 webpack-bundle-analyzer@^3.8.0:
   version "3.9.0"
