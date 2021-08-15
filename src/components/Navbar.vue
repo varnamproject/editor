@@ -7,18 +7,15 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-row align="end" justify="end" dense>
-        <v-col lg="5" md="5" sm="5">
-          <v-select
-            :items="langs"
-            :hide-details="true"
-            v-model="lang"
-            label="Language"
-            outlined
-            dense
-          ></v-select>
-        </v-col>
-      </v-row>
+      <v-select
+        :items="langs"
+        :hide-details="true"
+        v-model="lang"
+        label="Language"
+        outlined
+        dense
+        class="flex-grow-0 flex-shrink-1"
+      ></v-select>
       <v-btn v-if="$route.name == 'Home'" to="/settings" color="primary" class="ma-2" depressed>
         <v-icon :left="icon">mdi-cog</v-icon>
         <span v-show="iconText">Settings</span>

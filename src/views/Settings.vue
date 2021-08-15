@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-layout class="d-flex justify-center">
       <v-flex xs11 xl6>
-        <v-tabs v-model="tab" :grow="true">
+        <v-tabs v-model="tab" :grow="true" :show-arrows="true">
           <v-tabs-slider></v-tabs-slider>
           <v-tab href="#editor">
             <v-icon>lead-pencil</v-icon>
