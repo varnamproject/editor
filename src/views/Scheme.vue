@@ -120,7 +120,7 @@ export default {
           align: 'start',
           value: 'Letter',
           groupable: true,
-          width: '10%'
+          width: '15%'
         },
         {
           text: 'Primary',
