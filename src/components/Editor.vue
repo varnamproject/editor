@@ -115,10 +115,9 @@ export default {
     init () {
       const tribute = new Tribute({
         autocompleteMode: true,
-        spaceSelectsMatch: true,
+        allowSpaces: true,
 
         values: (text, cb) => {
-          console.log(text)
           this.transliterate(text)
             .then(sugs => {
               if (!sugs) return
