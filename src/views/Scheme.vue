@@ -240,8 +240,6 @@ export default {
 
     schemeTableSortFunc (items, sortBy, sortDesc) {
       return items.sort((a, b) => {
-        console.log(sortBy)
-
         a = a[sortBy[0]]
         b = b[sortBy[0]]
 
@@ -255,7 +253,7 @@ export default {
         } else if (!aEnglish && bEnglish) {
           return -1
         } else {
-          return a > b
+          return a.localeCompare(b)
         }
       })
     }
