@@ -24,7 +24,14 @@
                 <b>"Secondary"</b> is only a secondary key for a letter.</p>
               </v-card-text>
               <v-card-title>
-                <v-btn color="primary" @click="toggleAllGroups">{{groupsOpened > 0 ? "Close All" : "Open All"}}</v-btn>
+                <p v-if="tableTitle" class="text-h4 text--primary">
+                  <v-btn to="/scheme" color="primary" class="ma-2" depressed>
+                    <v-icon :left="icon">mdi-arrow-left</v-icon>
+                    <span v-show="iconText">Back</span>
+                  </v-btn>
+                  {{tableTitle}}
+                </p>
+                <v-btn v-else color="primary" @click="toggleAllGroups">{{groupsOpened > 0 ? "Close All" : "Open All"}}</v-btn>
                 <v-spacer></v-spacer>
                 <v-text-field
                   v-model="search"
@@ -41,11 +48,11 @@
                       <v-icon v-if="isOpen">mdi-minus</v-icon>
                       <v-icon v-else>mdi-plus</v-icon>
                     </v-btn>
-                    <span class="mx-5 font-weight-bold">{{ group }}</span>
+                    <span class="mx-5 text-subtitle-1 font-weight-bold">{{ group }}</span>
                   </td>
                 </template>
                 <template v-slot:item.Letter="{ item }">
-                  <router-link :to="'/scheme/' + item.Letter" class="primary--text">{{item.Letter}}</router-link>
+                  <router-link :to="'/scheme/' + item.Letter" class="text-h6">{{item.Letter}}</router-link>
                 </template>
               </v-data-table>
             </v-card>
@@ -109,6 +116,7 @@ export default {
 
   data () {
     return {
+      tableTitle: '',
       details: {},
 
       schemeCardLoading: false,
@@ -178,6 +186,9 @@ export default {
       let url = this.$VARNAM_API_URL + '/schemes/' + this.schemeID + '/definitions'
       if (this.$route.params.letter) {
         url += '/' + this.$route.params.letter
+        this.tableTitle = this.$route.params.letter
+      } else {
+        this.tableTitle = ''
       }
       fetch(url)
         .then(r => r.json())
@@ -192,9 +203,12 @@ export default {
 
           this.schemeCardLoading = false
 
-          // Make groups closed by default
+          // make groups closed by default
           this.$nextTick(() => {
-            this.toggleAllGroups()
+            this.updateGroupsOpen()
+            if (this.groupsOpened > 0) {
+              this.toggleAllGroups() // Close
+            }
           })
         })
     },
