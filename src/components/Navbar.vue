@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-toolbar>
+      <v-app-bar-nav-icon class="primary--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="title">
         <router-link to="/" class="primary--text text-decoration-none">
           Varnam
@@ -14,30 +15,45 @@
         label="Language"
         outlined
         dense
-        class="flex-grow-0 flex-shrink-1"
+        class="flex-grow-0 flex-shrink-1 d-none d-sm-block"
       ></v-select>
-      <v-btn v-if="$route.name == 'Home'" to="/settings" color="primary" class="ma-2" depressed>
-        <v-icon :left="icon">mdi-cog</v-icon>
-        <span v-show="iconText">Settings</span>
-      </v-btn>
-      <v-btn v-else to="/" color="primary" class="ma-2" depressed>
-        <v-icon :left="icon">mdi-arrow-left</v-icon>
-        <span v-show="iconText">Back</span>
-      </v-btn>
-      <v-btn to="/scheme" color="primary" class="ma-2" depressed>
-        <v-icon :left="icon">mdi-information-outline</v-icon>
-        <span v-show="iconText">Help</span>
-      </v-btn>
+      <NavbarButtons :list="false" />
     </v-toolbar>
+    <v-navigation-drawer app v-model="drawer" class="primary--text">
+      <v-list>
+        <v-list-item @click="drawer = !drawer">
+          <v-app-bar-nav-icon class="primary--text"></v-app-bar-nav-icon>
+          <span class="primary--text text-decoration-none">
+            Varnam
+          </span>
+        </v-list-item>
+        <v-list-item class="mt-4">
+          <v-select
+            :items="langs"
+            :hide-details="true"
+            v-model="lang"
+            label="Language"
+            outlined
+            dense
+            class="flex-grow-0 flex-shrink-1"
+          ></v-select>
+        </v-list-item>
+        <NavbarButtons :list="true" class="mt-4" />
+      </v-list>
+    </v-navigation-drawer>
   </div>
 </template>
 
 <script>
+import NavbarButtons from './NavbarButtons.vue'
 export default {
+  components: { NavbarButtons },
   name: 'Navbar',
 
   data () {
-    return {}
+    return {
+      drawer: false
+    }
   },
 
   computed: {
@@ -61,26 +77,6 @@ export default {
           lang: value
         })
       }
-    },
-
-    icon () {
-      return {
-        xs: false,
-        sm: false,
-        md: true,
-        lg: true,
-        xl: true
-      }[this.$vuetify.breakpoint.name]
-    },
-
-    iconText () {
-      return {
-        xs: false,
-        sm: false,
-        md: true,
-        lg: true,
-        xl: true
-      }[this.$vuetify.breakpoint.name]
     }
   }
 }
