@@ -157,6 +157,7 @@ export default {
     transliterate (word) {
       return new Promise((resolve, reject) => {
         let suggestions = []
+        word = encodeURIComponent(word)
 
         if (!this.$VARNAM_OFFLINE && this.$store.state.idbWords[word]) {
           // First, check IndexedDB
