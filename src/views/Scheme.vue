@@ -59,20 +59,19 @@
           </v-tab-item>
           <v-tab-item value="reverse">
             <v-card>
-              <v-card-title>
+              <v-card-text>
                 <v-form @submit="reverseTransliterate" class="d-flex flex-row flex-grow-1">
                   <v-text-field
                     v-model="reverseTransliterateInput"
                     append-icon="mdi-magnify"
-                    label="Type a language word to know how to type it"
+                    v-bind:label="'Type ' + schemeDisplayName + ' words here...'"
                     single-line
                     hide-details
                     class="flex-grow-1"
                   ></v-text-field>
                   <v-btn class="flex-shrink-0 ml-4 align-self-center" color="primary" type="submit">Find</v-btn>
                 </v-form>
-              </v-card-title>
-              <v-card-text>
+                <p class="mt-2">Find different ways to write a {{schemeDisplayName}} word. This is reverse transliteration.</p>
                 <v-list-item v-for="(result, index) in reverseTransliterationResult" :key="index">
                   <v-list-item-content>
                     <v-list-item-title>{{index + 1}}. {{result}}</v-list-item-title>
@@ -176,6 +175,17 @@ export default {
     },
     schemeID () {
       return this.$store.state.settings.lang
+    },
+    schemeDisplayName () {
+      const langInfo = this.$store.state.langs.find(item => {
+        return item.Identifier === this.$store.state.settings.lang
+      })
+
+      if (langInfo) {
+        return langInfo.DisplayName
+      } else {
+        return ''
+      }
     }
   },
 
@@ -245,7 +255,8 @@ export default {
 
     reverseTransliterate (e) {
       e.preventDefault()
-      fetch(this.$VARNAM_API_URL + '/rtl/' + this.schemeID + '/' + this.reverseTransliterateInput)
+      const input = encodeURIComponent(this.reverseTransliterateInput)
+      fetch(this.$VARNAM_API_URL + '/rtl/' + this.schemeID + '/' + input)
         .then(r => r.json())
         .then(r => {
           this.reverseTransliterationResult = r.result
