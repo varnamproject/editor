@@ -40,46 +40,11 @@
 import Tribute from 'webime'
 import 'webime/tribute.css'
 
-// const minWordSize = 1
-// const cycleOnTab = true
-// const KEY = {
-//   UNKNOWN: 0,
-//   SHIFT: 16,
-//   CTRL: 17,
-//   ALT: 18,
-//   LEFT: 37,
-//   UP: 38,
-//   RIGHT: 39,
-//   DOWN: 40,
-//   DEL: 46,
-//   TAB: 9,
-//   RETURN: 13,
-//   ESC: 27,
-//   COMMA: 188,
-//   PAGEUP: 33,
-//   PAGEDOWN: 34,
-//   BACKSPACE: 8,
-//   SPACE: 32
-// }
-
 let input
+let currentSugs = []
+const committedSugs = []
 
-// const transliterateTimeout = []
 const fetchController = []
-
-// Thanks vsync
-// https://stackoverflow.com/a/13335359/1372424
-// function hasEnglishChar (s) {
-//   let i, charCode
-//   for (i = s.length; i--;) {
-//     charCode = s.charCodeAt(i)
-//     // Character code from A to z
-//     if (charCode >= 65 && charCode <= 122) {
-//       return true
-//     }
-//   }
-//   return false
-// }
 
 export default {
   name: 'Editor',
@@ -114,23 +79,25 @@ export default {
   methods: {
     init () {
       const tribute = new Tribute({
-        autocompleteMode: true,
-        allowSpaces: true,
-
         values: (text, cb) => {
-          this.transliterate(text)
-            .then(sugs => {
-              if (!sugs) return
-              const result = []
-              for (let i = 0; i < sugs.length; i++) {
-                const retval = {
-                  key: text,
-                  value: sugs[i].trim()
+          console.log(text, committedSugs)
+          if (committedSugs[text]) {
+            cb(committedSugs[text])
+          } else {
+            this.transliterate(text)
+              .then(sugs => {
+                if (!sugs) return
+                currentSugs = []
+                for (let i = 0; i < sugs.length; i++) {
+                  const retval = {
+                    key: text,
+                    value: sugs[i].trim()
+                  }
+                  currentSugs.push(retval)
                 }
-                result.push(retval)
-              }
-              cb(result)
-            })
+                cb(currentSugs)
+              })
+          }
         },
 
         menuItemTemplate: item => {
@@ -141,6 +108,11 @@ export default {
       input = this.$refs.editor.$el.getElementsByTagName('textarea')[0]
 
       tribute.attach(input)
+
+      input.addEventListener('tribute-replaced', function (e) {
+        console.log(currentSugs)
+        committedSugs[e.detail.item.original.value] = currentSugs
+      })
 
       // For online editor
       if (!this.$VARNAM_OFFLINE) {
