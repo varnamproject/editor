@@ -155,11 +155,18 @@ export default {
   computed: {
     tab: {
       set (tab) {
-        this.$router.replace({
-          query: { ...this.$route.query, tab }
-        })
+        if (tab === 'scheme') {
+          this.$router.replace({
+            query: {}
+          })
+        } else {
+          this.$router.replace({
+            query: { ...this.$route.query, tab }
+          })
+        }
       },
       get () {
+        if (this.$route.query.tab === '') return 'scheme'
         return this.$route.query.tab
       }
     },
