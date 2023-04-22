@@ -162,7 +162,7 @@ export default {
       return this.packsFromUpstream.map((item, index) => {
         let installedVersions = 0
 
-        item.versions = item.versions.map(versionItem => {
+        item.versions = item.pages.map(versionItem => {
           versionItem.packID = item.identifier
 
           versionItem.installed = this.packsInstalled.indexOf(versionItem.identifier) > -1
@@ -171,7 +171,7 @@ export default {
           return versionItem
         })
 
-        item.installed = installedVersions === item.versions.length
+        item.installed = installedVersions === item.pages.length
 
         return item
       })
@@ -190,7 +190,7 @@ export default {
           if (response.status === 200) {
             // Get an array of installed packs' identifier
             this.packsInstalled = json.reduce((acc, item) => {
-              return acc.concat(item.versions.reduce((acc2, item2) => {
+              return acc.concat(item.pages.reduce((acc2, item2) => {
                 acc2.push(item2.identifier)
                 return acc2
               }, []))
