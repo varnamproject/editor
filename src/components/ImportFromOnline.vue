@@ -43,14 +43,14 @@
         <td></td>
         <td :colspan="headers.length">
           <v-data-table
-            :headers="versionHeaders"
-            :items.sync="item.versions"
+            :headers="pageHeaders"
+            :items.sync="item.pages"
             :hide-default-header="true"
             :hide-default-footer="true"
             item-key="identifier"
             show-select
-            v-model="packsVersionsSelected"
-            @item-selected="onPackVersionSelect"
+            v-model="packsPagesSelected"
+            @item-selected="onPackPageSelect"
           >
             <template v-slot:item.data-table-select="{ item, isSelected, select }">
               <v-icon
@@ -119,11 +119,11 @@ export default {
           value: 'description'
         }
       ],
-      versionHeaders: [
+      pageHeaders: [
         {
-          text: 'Version',
+          text: 'Page',
           sortable: false,
-          value: 'version'
+          value: 'page'
         },
         {
           text: 'Description',
@@ -145,13 +145,13 @@ export default {
       packsFromUpstream: [],
 
       packsSelected: [],
-      packsVersionsSelected: []
+      packsPagesSelected: []
     }
   },
 
   computed: {
     downloadBtnDisabled () {
-      return this.packsVersionsSelected.length === 0
+      return this.packsPagesSelected.length === 0
     },
 
     upstreamURL () {
@@ -160,18 +160,18 @@ export default {
 
     packs () {
       return this.packsFromUpstream.map((item, index) => {
-        let installedVersions = 0
+        let installedPages = 0
 
-        item.versions = item.pages.map(versionItem => {
-          versionItem.packID = item.identifier
+        item.pages = item.pages.map(pageItem => {
+          pageItem.packID = item.identifier
 
-          versionItem.installed = this.packsInstalled.indexOf(versionItem.identifier) > -1
-          if (versionItem.installed) installedVersions++
+          pageItem.installed = this.packsInstalled.indexOf(pageItem.identifier) > -1
+          if (pageItem.installed) installedPages++
 
-          return versionItem
+          return pageItem
         })
 
-        item.installed = installedVersions === item.pages.length
+        item.installed = installedPages === item.pages.length
 
         return item
       })
@@ -221,23 +221,23 @@ export default {
     onPackSelect (e) {
       if (e.value) {
         // checked
-        this.packsVersionsSelected = this.packsVersionsSelected.concat(e.item.versions.filter(item => !item.installed))
+        this.packsPagesSelected = this.packsPagesSelected.concat(e.item.pages.filter(item => !item.installed))
       } else {
         const ids = []
-        e.item.versions.forEach(item => ids.push(item.id))
+        e.item.pages.forEach(item => ids.push(item.id))
 
-        this.packsVersionsSelected = this.packsVersionsSelected.filter(item => ids.indexOf(item.id) === -1)
+        this.packsPagesSelected = this.packsPagesSelected.filter(item => ids.indexOf(item.id) === -1)
       }
     },
 
-    onPackVersionSelect (e) {
+    onPackPageSelect (e) {
       const pack = this.packs.find(item => item.identifier === e.item.packID)
-      const packsVersionsSelected = this.packsVersionsSelected.filter(item => item.packID === e.item.packID)
+      const packsPagesSelected = this.packsPagesSelected.filter(item => item.packID === e.item.packID)
 
-      const availableVersions = pack.versions.filter(item => !item.installed)
+      const availablePages = pack.pages.filter(item => !item.installed)
 
       // +1 is for the current item selected
-      if (availableVersions.length === packsVersionsSelected.length + (e.value ? 1 : -1)) {
+      if (availablePages.length === packsPagesSelected.length + (e.value ? 1 : -1)) {
         this.packsSelected.push(pack)
       } else {
         this.packsSelected = this.packsSelected.filter(item => item.identifier !== e.item.packID)
@@ -247,16 +247,16 @@ export default {
     onPackSelectAll (e) {
       if (e.value) {
         // Select all
-        const allPacksVersions = this.packs.reduce((combined, item) => combined.concat(item.versions.filter(item => !item.installed)), [])
-        this.packsVersionsSelected = allPacksVersions
+        const allPacksPages = this.packs.reduce((combined, item) => combined.concat(item.pages.filter(item => !item.installed)), [])
+        this.packsPagesSelected = allPacksPages
       } else {
         // Unselect all
-        this.packsVersionsSelected = []
+        this.packsPagesSelected = []
       }
     },
 
-    downloadPack (packVersion) {
-      const pid = packVersion.identifier
+    downloadPack (packPage) {
+      const pid = packPage.identifier
 
       return new Promise((resolve, reject) => {
         this.$set(this.log, pid, {
@@ -272,8 +272,8 @@ export default {
           },
           body: JSON.stringify({
             lang: this.$store.state.settings.lang,
-            pack: packVersion.packID,
-            version: pid
+            pack: packPage.packID,
+            page: pid
           })
         })
           .then(async response => {
@@ -294,7 +294,7 @@ export default {
                   this.$toast('Successfully imported pack', {
                     color: 'success'
                   })
-                  this.packsInstalled.push(packVersion.identifier)
+                  this.packsInstalled.push(packPage.identifier)
                   resolve()
                 } else {
                   // Read some more, and call this function again
@@ -321,8 +321,8 @@ export default {
     },
 
     download () {
-      this.packsVersionsSelected.forEach(async packVersion => {
-        await this.downloadPack(packVersion)
+      this.packsPagesSelected.forEach(async packPage => {
+        await this.downloadPack(packPage)
       })
     }
   },
