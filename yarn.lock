@@ -8564,9 +8564,9 @@ vuetify-toast-snackbar-ng@0.7.3:
   integrity sha512-o+bDDQ7eu6X4BKH/HzJA5NOA9ghIoiimdYjs0Kr1SktJ6FGHV5umkXxhLjaXQXhOmLVx3ig8mkOETqj5P0CJrA==
 
 vuetify@^2.2.11:
-  version "2.5.8"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.5.8.tgz#a23e6a7e77b77de0744b53cf1e7c9d40efac0635"
-  integrity sha512-paLmNhKTYFD41+14rIHnCo+P1jHbUzwBiMowxs5qXVq8RdRMqRmcy05Sfse1WUu90amPGK2fIFQq5rL2N8zqZg==
+  version "2.6.15"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.6.15.tgz#058c976f4e6e834076d80ae0c09bd61baa836d26"
+  integrity sha512-2a6sBSHzivXgi9pZMyHuzTgMyInCkj/BrVwTnoCa1Y/Dnfwj7lkWzgKQDScbGVK0q4vJ+YHoBBrLOmnhz1R0YA==
 
 vuex@^3.4.0:
   version "3.6.2"
@@ -8605,9 +8605,10 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
-"webime@https://github.com/varnamproject/webIME.git":
-  version "1.0.0"
-  resolved "https://github.com/varnamproject/webIME.git#3b0c58371cd0b06f05bff4609e64aa761c9c4dff"
+webime@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/webime/-/webime-1.0.2.tgz#29902f5c5071723c211fea7c8752acd94e55f790"
+  integrity sha512-FDz86oO9kXyZSui22YG+8F608pSntpDHtcyNv9xgmkImXUZ6qitzRwMOajMYBSsQ308TStzxEt8SwNOBxv3MJg==
 
 webpack-bundle-analyzer@^3.8.0:
   version "3.9.0"

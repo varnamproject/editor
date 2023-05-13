@@ -37,8 +37,8 @@
 </template>
 
 <script>
-import Tribute from 'webime'
-import 'webime/tribute.css'
+import WebIME from 'webime'
+import 'webime/dist/style.css'
 
 let input
 let currentSugs = []
@@ -78,7 +78,7 @@ export default {
 
   methods: {
     init () {
-      const tribute = new Tribute({
+      const webIME = new WebIME({
         values: (text, cb) => {
           console.log(text, committedSugs)
           if (committedSugs[text]) {
@@ -107,7 +107,7 @@ export default {
 
       input = this.$refs.editor.$el.getElementsByTagName('textarea')[0]
 
-      tribute.attach(input)
+      webIME.attach(input)
 
       input.addEventListener('tribute-replaced', function (e) {
         console.log(currentSugs)
